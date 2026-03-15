@@ -1,0 +1,4 @@
+/api/translate  /.netlify/functions/translate  200
+/api/tts        /.netlify/functions/tts        200
+/api/detect     /.netlify/functions/detect     200
+/*              /index.html                    200

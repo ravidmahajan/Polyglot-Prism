@@ -1,0 +1,242 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Theme variables ───────────────────────────────────────── */
+:root,
+[data-theme="dark"] {
+  --bg: #050510;
+  --bg-glass: rgba(255, 255, 255, 0.04);
+  --bg-glass-hover: rgba(255, 255, 255, 0.08);
+  --border-glass: rgba(255, 255, 255, 0.07);
+  --text: #ffffff;
+  --text-2: #e2e8f0;
+  --text-3: #94a3b8;
+  --text-4: #64748b;
+  --text-5: #475569;
+  --scrollbar-track: rgba(5, 5, 16, 0.8);
+  --scrollbar-thumb: rgba(99, 102, 241, 0.4);
+  --scrollbar-thumb-hover: rgba(99, 102, 241, 0.6);
+}
+
+[data-theme="light"] {
+  --bg: #f0f4ff;
+  --bg-glass: rgba(255, 255, 255, 0.72);
+  --bg-glass-hover: rgba(255, 255, 255, 0.88);
+  --border-glass: rgba(99, 102, 241, 0.1);
+  --text: #0f172a;
+  --text-2: #1e293b;
+  --text-3: #475569;
+  --text-4: #64748b;
+  --text-5: #94a3b8;
+  --scrollbar-track: #e2e8f0;
+  --scrollbar-thumb: rgba(99, 102, 241, 0.45);
+  --scrollbar-thumb-hover: rgba(99, 102, 241, 0.7);
+}
+
+/* ── Base ──────────────────────────────────────────────────── */
+@layer base {
+  body {
+    background: var(--bg);
+    color: var(--text);
+    @apply antialiased;
+    min-height: 100vh;
+    transition: background 0.5s ease, color 0.3s ease;
+  }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+  ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+}
+
+/* ── Theme-aware utility classes ───────────────────────────── */
+@layer utilities {
+  .text-theme        { color: var(--text); }
+  .text-theme-2      { color: var(--text-2); }
+  .text-theme-3      { color: var(--text-3); }
+  .text-theme-4      { color: var(--text-4); }
+  .text-theme-5      { color: var(--text-5); }
+}
+
+/* ── Components ────────────────────────────────────────────── */
+@layer components {
+  .glass {
+    background: var(--bg-glass);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border-glass);
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+
+  .glass-hover:hover {
+    background: var(--bg-glass-hover);
+  }
+
+  .language-card {
+    @apply glass rounded-2xl p-5 cursor-pointer transition-all duration-300;
+  }
+
+  .language-card:hover {
+    transform: translateY(-4px);
+    background: var(--bg-glass-hover);
+    box-shadow: 0 12px 40px rgba(99, 102, 241, 0.12);
+  }
+
+  .shimmer {
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  [data-theme="light"] .shimmer {
+    background: linear-gradient(90deg, transparent 0%, rgba(99,102,241,0.08) 50%, transparent 100%);
+    background-size: 200% 100%;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+}
+
+/* ── Animated ambient background (dynamic, per-page) ──────── */
+.ambient-bg {
+  background:
+    radial-gradient(ellipse at 20% 20%, var(--g1) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 30%, var(--g2) 0%, transparent 50%),
+    radial-gradient(ellipse at 40% 80%, var(--g3) 0%, transparent 50%),
+    var(--g-base);
+  animation: ambientShift 20s ease-in-out infinite alternate;
+  transition: background 1.2s ease;
+}
+
+@keyframes ambientShift {
+  0%   { background-position: 0% 0%, 100% 0%, 50% 100%; }
+  33%  { background-position: 30% 20%, 70% 50%, 20% 80%; }
+  66%  { background-position: 60% 40%, 30% 10%, 80% 60%; }
+  100% { background-position: 10% 60%, 90% 40%, 40% 20%; }
+}
+
+/* Mouse-following glow spotlight */
+.mouse-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    600px circle at var(--mx, 50%) var(--my, 50%),
+    var(--o1) 0%,
+    transparent 60%
+  );
+  transition: background 0.8s ease;
+  pointer-events: none;
+}
+
+/* Subtle grid pattern for depth and premium feel */
+.grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at 50% 50%, black 30%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 30%, transparent 70%);
+}
+
+[data-theme="light"] .grid-overlay {
+  background-image:
+    linear-gradient(rgba(99, 102, 241, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.04) 1px, transparent 1px);
+}
+
+/* Film-grain noise for realism */
+.noise-overlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+  pointer-events: none;
+}
+
+/* Floating orbs */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: float 12s ease-in-out infinite;
+  transition: background 1.2s ease;
+}
+
+.orb-1 {
+  width: 500px;
+  height: 500px;
+  top: -10%;
+  right: -5%;
+  background: var(--o1);
+  animation-duration: 14s;
+}
+
+.orb-2 {
+  width: 400px;
+  height: 400px;
+  bottom: 10%;
+  left: -8%;
+  background: var(--o2);
+  animation-duration: 18s;
+  animation-delay: -5s;
+}
+
+.orb-3 {
+  width: 350px;
+  height: 350px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--o3);
+  animation-duration: 22s;
+  animation-delay: -10s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  25%      { transform: translateY(-30px) translateX(15px); }
+  50%      { transform: translateY(10px) translateX(-20px); }
+  75%      { transform: translateY(-15px) translateX(10px); }
+}
+
+/* ── Full-bleed ambient background gallery ─────────────────── */
+.ambient-gallery {
+  z-index: 0;
+}
+
+.ambient-gallery-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1.4s ease;
+  transform: scale(1.05);
+}
+
+.ambient-gallery-img.active {
+  opacity: 0.18;
+}
+
+[data-theme="light"] .ambient-gallery-img.active {
+  opacity: 0.14;
+}
+
+/* Floating script characters on homepage */
+.animate-float-char {
+  animation: floatChar linear infinite;
+}
+
+@keyframes floatChar {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 0.08; }
+  90%  { opacity: 0.08; }
+  100% { transform: translateY(-80px) rotate(15deg); opacity: 0; }
+}
